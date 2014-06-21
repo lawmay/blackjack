@@ -14,3 +14,11 @@
 .hand {
   overflow: auto;
 }
+
+.result{
+  position: absolute;
+  left: 250px;
+  border: 1px solid black;
+  height: 30px;
+  width: 150px;
+}
