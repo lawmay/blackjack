@@ -14,7 +14,7 @@ class window.App extends Backbone.Model
         console.log("Dealer Wins")
       else
         console.log("Player Wins")
-      @trigger('gameOver')
+      @trigger('roundOver')
 
     @get('playerHand').on 'bust', =>
       @trigger "playerBusted"
