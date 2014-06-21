@@ -14,10 +14,25 @@ class window.AppView extends Backbone.View
     "click .stand-button": -> @model.get('playerHand').stand()
     "click .new-game-button": -> @model.initialize(); console.log @; @render()
 
+  disableButtons: =>
+    @$('.stand-button').attr('disabled', 'disabled')
+    @$('.hit-button').attr('disabled', 'disabled')
 
+  playerBust : =>
+    @$('.result').html('')
+    @$('.result').append("Player Busted!")
+    @disableButtons()
+
+  dealerBust : =>
+    @$('.result').html('')
+    @$('.result').append("Dealer Busted!")
+    @disableButtons()
   initialize: ->
     @render()
-    @model.on "playerBusted", => console.log @; @$('.result').html("<p>Player Busted!</p>"); @render()
+    @$('.result').html('')
+    @model.on "playerBusted", => @playerBust()
+    @model.on "dealerBusted", => @dealerBust()
+    @model.on "roundOver", => @disableButtons()
 
   render: ->
     @$el.children().detach()
