@@ -1,26 +1,30 @@
 #todo: refactor to have a game beneath the outer blackjack model
 class window.App extends Backbone.Model
 
-  initialize: ->
+  initialize: =>
     @set 'inPlay', true
     @set 'deck', deck = new Deck()
-    @set 'playerHand', deck.dealPlayer()
     @set 'dealerHand', deck.dealDealer()
+    @set 'playerHand', deck.dealPlayer()
+
     @get('playerHand').on 'stand', =>
       if @get('inPlay')
         @get('dealerHand').models[0].flip()
         @get('dealerHand').hit() while @get('dealerHand').scores() < 17
-      if @get('dealerHand').scores() > @get('playerHand').scores()
-        console.log("Dealer Wins")
+      if @get('dealerHand').scores() > @get('playerHand').scores() and @get('dealerHand').scores() <= 21
+        @trigger("dealerWin")
+      else if @get('dealerHand').scores() is @get('playerHand').scores()
+        @trigger('tie')
       else
-        console.log("Player Wins")
+        @trigger("playerWin")
       @trigger('roundOver')
 
     @get('playerHand').on 'bust', =>
-      @trigger "playerBusted"
-      @set 'inPlay', false
-      console.log(@get('inPlay'))
-    @get('dealerHand').on 'bust', =>
-      @trigger "dealerBusted"
-      @set 'inPlay', false
+      # @set 'inPlay', false
+      @trigger('dealerWin')
     @
+
+  checkInstaWin: =>
+    if @get('playerHand').scores() == 21
+      @trigger('playerWin')
+      # setTimeout(@trigger('playerWin'), 1000).bind(@)

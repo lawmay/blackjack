@@ -2,12 +2,11 @@ class window.Hand extends Backbone.Collection
 
   model: Card
 
-  initialize: (array, @deck, @isDealer) ->
+  initialize: (array, @deck, @isDealer) =>
 
   hit: =>
     @add(@deck.pop()).last()
     if @scores() > 21 then @trigger 'bust'
-
 
   scores: ->
     # The scores are an array of potential scores.
